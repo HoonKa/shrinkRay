@@ -19,17 +19,5 @@ export class User {
   isAdmin: boolean;
 
   @ManyToOne(() => Link, (links) => links.users)
-  links: Relation<Link>[];
-
-  // @Column({ unique: true })
-  // email: string;
-
-  // @Column({ default: false })
-  // verifiedEmail: boolean;
-
-  // @Column({ default: 0 })
-  // profileViews: number;
-
-  // @Column({ default: 0 })
-  // updateEmail: string;
+  links: Relation<Link>[]; // OneToMany
 }
