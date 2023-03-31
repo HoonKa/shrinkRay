@@ -1,4 +1,4 @@
-import { Entity, PrimaryColumn, Column, OneToMany, Relation } from 'typeorm';
+import { Entity, PrimaryColumn, Column, ManyToOne, Relation } from 'typeorm';
 import { User } from './User';
 
 @Entity()
@@ -10,11 +10,11 @@ export class Link {
   originalUrl: string;
 
   @Column()
-  lasAccessedOn: Date;
+  lastAccessedOn: Date;
 
   @Column({ default: 0 })
-  numHis: number;
+  numHit: number;
 
-  @OneToMany(() => User, (users) => users.links)
-  users: Relation<User>[]; // ManyToOne
+  @ManyToOne(() => User, (user) => user.links)
+  user: Relation<User>[]; // ManyToOne
 }

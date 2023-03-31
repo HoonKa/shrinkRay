@@ -4,8 +4,6 @@ import { User } from '../entities/User';
 const userRepository = AppDataSource.getRepository(User);
 
 async function getUserByUsername(username: string): Promise<User | null> {
-  // TODO: Get the user by where the username matches the parameter
-  // This should also retrieve the `links` relation
   if (!username) {
     return null;
   }
@@ -33,5 +31,23 @@ async function getUserByName(username: string): Promise<User | null> {
 
   return user;
 }
+async function getUserById(userId: string): Promise<User | null> {
+  if (!userId) {
+    return null;
+  }
+  const user = await userRepository
+    .createQueryBuilder('user')
+    .where({ userId })
+    .select([
+      'user.userId',
+      'user.username',
+      'user.passwordHash',
+      'user.isPro',
+      'user.isAdmin',
+      'user.links',
+    ])
+    .getOne();
+  return user;
+}
 
-export { getUserByUsername, addNewUser, getUserByName };
+export { getUserByUsername, addNewUser, getUserByName, getUserById };

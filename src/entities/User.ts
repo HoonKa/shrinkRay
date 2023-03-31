@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, Relation } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, Relation } from 'typeorm';
 import { Link } from './Link';
 
 @Entity()
@@ -18,6 +18,6 @@ export class User {
   @Column({ default: false })
   isAdmin: boolean;
 
-  @ManyToOne(() => Link, (links) => links.users)
+  @OneToMany(() => Link, (links) => links.user)
   links: Relation<Link>[]; // OneToMany
 }

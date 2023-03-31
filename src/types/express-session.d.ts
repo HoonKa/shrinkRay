@@ -6,10 +6,12 @@ declare module 'express-session' {
 
     authenticatedUser: {
       userId: string;
-      isPro: true;
-      isAdmin: true;
+      isPro: boolean;
+      isAdmin: boolean;
       username: string;
     };
+
+    isLoggedIn: boolean;
 
     // NOTES: Add your app's custom session properties here:
   }
