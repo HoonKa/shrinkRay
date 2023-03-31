@@ -7,8 +7,7 @@ async function registerUser(req: Request, res: Response): Promise<void> {
   const { username, password } = req.body as AuthRequest;
   const userExist = await getUserByUsername(username);
   if (userExist) {
-    res.sendStatus(404);
-    console.log(`User already exists.`);
+    res.sendStatus(404).json('User already exists.');
   }
 
   const passwordHash = await argon2.hash(password);
@@ -16,7 +15,7 @@ async function registerUser(req: Request, res: Response): Promise<void> {
   try {
     const newUser = await addNewUser(username, passwordHash);
     console.log(newUser);
-    res.sendStatus(201);
+    res.sendStatus(201).json(newUser);
   } catch (err) {
     console.error(err);
     const databaseErrorMessage = parseDatabaseError(err);
@@ -32,7 +31,7 @@ async function logIn(req: Request, res: Response): Promise<void> {
   const user = await getUserByName(username);
 
   if (!user) {
-    res.sendStatus(404);
+    res.sendStatus(401);
     return;
   }
 

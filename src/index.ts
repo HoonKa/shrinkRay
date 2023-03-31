@@ -31,9 +31,9 @@ app.use(express.json());
 app.post('/api/users', registerUser);
 app.post('/api/login', logIn);
 app.post('/api/shortlink', shortenUrl);
-app.post('/api/:targetLinkId', getOriginalUrl);
+app.get('/api/:targetLinkId', getOriginalUrl);
 app.post('/api/users/:userId/links', getLinkForProAdmin);
-app.delete('/api/users/:userId/links/:userId', deleteLink);
+app.delete('/api/users/:userId/links/:linkId', deleteLink);
 
 app.listen(PORT, () => {
   console.log(`Listening at http://localhost:${PORT}`);

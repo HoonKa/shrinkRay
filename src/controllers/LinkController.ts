@@ -12,11 +12,6 @@ import { getUserById } from '../models/UserModels';
 import { parseDatabaseError } from '../utils/db-utils';
 
 async function shortenUrl(req: Request, res: Response): Promise<void> {
-  if (!req.session.isLoggedIn) {
-    res.sendStatus(401);
-    return;
-  }
-
   const { userId } = req.session.authenticatedUser;
   const user = await getUserById(userId);
 
@@ -24,11 +19,15 @@ async function shortenUrl(req: Request, res: Response): Promise<void> {
     res.sendStatus(404);
     return;
   }
+  if (!req.session.isLoggedIn) {
+    res.sendStatus(401);
+    return;
+  }
+
   const { isPro, isAdmin } = req.session.authenticatedUser;
   if (!isPro || !isAdmin) {
     if (user.links.length >= 5) {
-      res.sendStatus(403);
-      console.log(`You have exceeded the maximum number of shortened links allowed.`);
+      res.sendStatus(403).json('You have exceeded the maximum number of shortened links allowed.');
       return;
     }
   }

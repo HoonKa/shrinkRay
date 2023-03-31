@@ -10,14 +10,13 @@ async function getUserByUsername(username: string): Promise<User | null> {
   const user = await userRepository
     .createQueryBuilder('user')
     .where({ username })
-    // .select(['user.username', 'user.profileViews', 'user.joined0n', 'user.userId'])
+    .select(['user.username', 'user.profileViews', 'user.joined0n', 'user.userId'])
     .getOne();
 
   return user;
 }
 
 async function addNewUser(username: string, passwordHash: string): Promise<User | null> {
-  // TODO: Add the new user to the database
   let newUser = new User();
   newUser.username = username;
   newUser.passwordHash = passwordHash;
@@ -49,9 +48,5 @@ async function getUserById(userId: string): Promise<User | null> {
     .getOne();
   return user;
 }
-// async function getUserById(userId: string): Promise<User | null> {
-//   const user = await userRepository.findOne({ where: { userId } });
-//   return user;
-// }
 
 export { getUserByUsername, addNewUser, getUserByName, getUserById };
