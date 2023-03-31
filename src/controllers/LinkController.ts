@@ -47,21 +47,17 @@ async function shortenUrl(req: Request, res: Response): Promise<void> {
 }
 
 async function getOriginalUrl(req: Request, res: Response): Promise<void> {
-  // Retrieve the link data using the targetLinkId from the path parameter
-  const { targetLinkId } = req.params as TargetLinkId;
+  const { targetLinkId } = req.body as TargetLinkId;
 
   const linkData = await getLinkById(targetLinkId);
 
-  // Check if you got back `null`
   if (!linkData) {
     res.sendStatus(404);
   }
 
   updateLinkVisits(linkData);
+
   res.redirect(301, linkData.originalUrl);
-  // send the appropriate response
-  // Call the appropriate function to increment the number of hits and the last accessed date
-  // Redirect the client to the original URL
 }
 
 export { shortenUrl, getOriginalUrl };
