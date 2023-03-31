@@ -15,10 +15,10 @@ function createLinkId(originalUrl: string, userId: string): string {
 }
 
 async function createNewLink(originalUrl: string, linkId: string, creator: User): Promise<Link> {
-  // TODO: Implement me!
   let newLink = new Link();
   newLink.originalUrl = originalUrl;
   newLink.linkId = linkId;
+  newLink.numHit = 0;
   newLink.user = creator;
 
   newLink = await linkRepository.save(newLink);
