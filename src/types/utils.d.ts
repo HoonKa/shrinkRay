@@ -16,3 +16,7 @@ type OriginalUrl = {
 type TargetLinkId = {
   targetLinkId: string;
 };
+
+type ProAdminUser = {
+  userId: string;
+};
