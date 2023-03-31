@@ -38,4 +38,15 @@ async function getLinkById(linkId: string): Promise<Link | null> {
   return link;
 }
 
-export { createLinkId, createNewLink, getLinkById };
+async function updateLinkVisits(link: Link): Promise<Link> {
+  let updatedLink = link;
+  const now = new Date();
+  updatedLink.numHit += 1;
+  updatedLink.lastAccessedOn = now;
+
+  updatedLink = await linkRepository.save(updatedLink);
+
+  return updatedLink;
+}
+
+export { createLinkId, createNewLink, getLinkById, updateLinkVisits };
