@@ -20,3 +20,7 @@ type TargetLinkId = {
 type ProAdminUser = {
   userId: string;
 };
+
+type UserLinkID = {
+  LinkId: string;
+};

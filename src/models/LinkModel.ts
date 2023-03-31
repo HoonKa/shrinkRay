@@ -32,7 +32,7 @@ async function getLinkById(linkId: string): Promise<Link | null> {
   }
   const link = await linkRepository
     .createQueryBuilder('link')
-    .where({ linkId })
+    .where('linkId = :linkId', { linkId })
     .select(['link.linkId', 'link.originalUrl', 'link.isAccessedOn', 'link.numHit', 'link.user'])
     .getOne();
   return link;
@@ -52,7 +52,7 @@ async function updateLinkVisits(link: Link): Promise<Link> {
 async function getLinksByUserId(userId: string): Promise<Link[]> {
   const links = await linkRepository
     .createQueryBuilder('link')
-    .where({ user: { userId } }) // NOTES: This is how you do nested WHERE clauses
+    .where('userId = userId', { user: { userId } }) // NOTES: This is how you do nested WHERE clauses
     .leftJoin('link.user', 'user')
     .select(['link.linkId', 'link.originalUrl', 'user.userId', 'user.username', 'user.isAdmin'])
     .getMany();
@@ -63,7 +63,7 @@ async function getLinksByUserId(userId: string): Promise<Link[]> {
 async function getLinksByUserIdForOwnAccount(userId: string): Promise<Link[]> {
   const links = await linkRepository
     .createQueryBuilder('link')
-    .where({ user: { userId } })
+    .where('userId = userId', { user: { userId } })
     .leftJoin('link.user', 'user')
     .select([
       'link.linkId',
@@ -80,6 +80,14 @@ async function getLinksByUserIdForOwnAccount(userId: string): Promise<Link[]> {
   return links;
 }
 
+async function deleteLinkByLinkId(linkId: string): Promise<void> {
+  await linkRepository
+    .createQueryBuilder('link')
+    .delete()
+    .where('linkId = :linkId', { linkId })
+    .execute();
+}
+
 export {
   createLinkId,
   createNewLink,
@@ -87,4 +95,5 @@ export {
   updateLinkVisits,
   getLinksByUserId,
   getLinksByUserIdForOwnAccount,
+  deleteLinkByLinkId,
 };
