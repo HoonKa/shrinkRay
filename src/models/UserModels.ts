@@ -49,5 +49,9 @@ async function getUserById(userId: string): Promise<User | null> {
     .getOne();
   return user;
 }
+// async function getUserById(userId: string): Promise<User | null> {
+//   const user = await userRepository.findOne({ where: { userId } });
+//   return user;
+// }
 
 export { getUserByUsername, addNewUser, getUserByName, getUserById };

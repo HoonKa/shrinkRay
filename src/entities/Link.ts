@@ -16,5 +16,5 @@ export class Link {
   numHit: number;
 
   @ManyToOne(() => User, (user) => user.links)
-  user: Relation<User>[]; // ManyToOne
+  user: Relation<User>; // ManyToOne
 }

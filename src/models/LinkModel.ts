@@ -19,7 +19,7 @@ async function createNewLink(originalUrl: string, linkId: string, creator: User)
   let newLink = new Link();
   newLink.originalUrl = originalUrl;
   newLink.linkId = linkId;
-  newLink.user = [creator];
+  newLink.user = creator;
 
   newLink = await linkRepository.save(newLink);
 
