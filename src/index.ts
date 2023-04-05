@@ -31,8 +31,8 @@ app.post('/users', registerUser);
 app.post('/login', logIn);
 
 app.post('/links', shortenUrl);
-app.get('/:targetLinkId', visitLink);
-app.get('/users/:targetUserId/links', getLinks);
+app.get('/:targetLinkId', getLinks);
+app.get('/users/:targetUserId/links', visitLink);
 app.delete('/users/:targetUserId/links/:targetLinkId', deleteLink);
 
 app.listen(PORT, () => {
