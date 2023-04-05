@@ -3,24 +3,3 @@ type DatabaseConstraintError = {
   columnName?: string;
   message?: string;
 };
-
-type AuthRequest = {
-  username: string;
-  password: string;
-};
-
-type OriginalUrl = {
-  originalUrl: string;
-};
-
-type TargetLinkId = {
-  targetLinkId: string;
-};
-
-type ProAdminUser = {
-  userId: string;
-};
-
-type UserLinkID = {
-  LinkId: string;
-};

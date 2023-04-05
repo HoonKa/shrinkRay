@@ -4,16 +4,15 @@ import express, { Express } from 'express';
 import session from 'express-session';
 import connectSqlite3 from 'connect-sqlite3';
 import { registerUser, logIn } from './controllers/UserController';
-import {
-  shortenUrl,
-  getOriginalUrl,
-  deleteLink,
-  getLinkForProAdmin,
-} from './controllers/LinkController';
+import { shortenUrl, deleteLink, getLinks, visitLink } from './controllers/LinkController';
 
 const app: Express = express();
+// app.set('view engine', 'ejs');
 const { PORT, COOKIE_SECRET } = process.env;
 const SQLiteStore = connectSqlite3(session);
+
+app.use(express.json());
+app.use(express.static('public', { extensions: ['html'] }));
 
 app.use(
   session({
@@ -26,14 +25,15 @@ app.use(
   })
 );
 
-app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
-app.post('/api/users', registerUser);
-app.post('/api/login', logIn);
-app.post('/api/shortlink', shortenUrl);
-app.get('/api/:targetLinkId', getOriginalUrl);
-app.post('/api/users/:userId/links', getLinkForProAdmin);
-app.delete('/api/users/:userId/links/:linkId', deleteLink);
+app.post('/users', registerUser);
+app.post('/login', logIn);
+
+app.post('/links', shortenUrl);
+app.get('/:targetLinkId', visitLink);
+app.get('/users/:targetUserId/links', getLinks);
+app.delete('/users/:targetUserId/links/:targetLinkId', deleteLink);
 
 app.listen(PORT, () => {
   console.log(`Listening at http://localhost:${PORT}`);

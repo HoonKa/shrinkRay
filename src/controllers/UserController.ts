@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import argon2 from 'argon2';
-import { getUserByUsername, addNewUser, getUserByName } from '../models/UserModels';
+import { getUserByUsername, addNewUser } from '../models/UserModels';
 import { parseDatabaseError } from '../utils/db-utils';
 
 async function registerUser(req: Request, res: Response): Promise<void> {
@@ -14,7 +14,7 @@ async function registerUser(req: Request, res: Response): Promise<void> {
 
   try {
     const newUser = await addNewUser(username, passwordHash);
-    console.log(newUser);
+    res.redirect('/login');
     res.sendStatus(201).json(newUser);
   } catch (err) {
     console.error(err);
@@ -28,10 +28,11 @@ async function logIn(req: Request, res: Response): Promise<void> {
 
   const { username, password } = req.body as AuthRequest;
 
-  const user = await getUserByName(username);
+  const user = await getUserByUsername(username);
 
   if (!user) {
     res.sendStatus(401);
+    // res.redirect("/login"); // redirect to login page.
     return;
   }
 
@@ -53,7 +54,9 @@ async function logIn(req: Request, res: Response): Promise<void> {
 
   req.session.isLoggedIn = true;
 
-  res.sendStatus(200);
+  // res.sendStatus(200);
+  // res.redirect("/welcome");//redirect to welcome.html page.
+  res.redirect('/shrink');
 }
 
 export { registerUser, logIn };

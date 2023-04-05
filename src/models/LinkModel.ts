@@ -5,6 +5,22 @@ import { AppDataSource } from '../dataSource';
 
 const linkRepository = AppDataSource.getRepository(Link);
 
+// async function getLinkById(linkId: string): Promise<Link | null> {
+//   if (!linkId) {
+//     return null;
+//   }
+//   const link = await linkRepository
+//     .createQueryBuilder('link')
+//     .where('linkId = :linkId', { linkId })
+//     .select(['link.linkId', 'link.originalUrl', 'link.isAccessedOn', 'link.numHit', 'link.user'])
+//     .getOne();
+//   return link;
+// }
+async function getLinkById(linkId: string): Promise<Link | null> {
+  const link = await linkRepository.findOne({ where: { linkId } });
+  return link;
+}
+
 function createLinkId(originalUrl: string, userId: string): string {
   const md5 = createHash('md5');
   md5.update(`${originalUrl}${userId}`);
@@ -18,24 +34,13 @@ async function createNewLink(originalUrl: string, linkId: string, creator: User)
   let newLink = new Link();
   newLink.originalUrl = originalUrl;
   newLink.linkId = linkId;
-  newLink.numHit = 0;
+  // newLink.numHit = 0;
   newLink.user = creator;
+  newLink.lastAccessedOn = new Date();
 
   newLink = await linkRepository.save(newLink);
 
   return newLink;
-}
-
-async function getLinkById(linkId: string): Promise<Link | null> {
-  if (!linkId) {
-    return null;
-  }
-  const link = await linkRepository
-    .createQueryBuilder('link')
-    .where('linkId = :linkId', { linkId })
-    .select(['link.linkId', 'link.originalUrl', 'link.isAccessedOn', 'link.numHit', 'link.user'])
-    .getOne();
-  return link;
 }
 
 async function updateLinkVisits(link: Link): Promise<Link> {
@@ -52,7 +57,8 @@ async function updateLinkVisits(link: Link): Promise<Link> {
 async function getLinksByUserId(userId: string): Promise<Link[]> {
   const links = await linkRepository
     .createQueryBuilder('link')
-    .where('userId = :userId', { user: { userId } })
+    // .where('userId = :userId', { user: { userId } })
+    .where({ user: { userId } })
     .leftJoin('link.user', 'user')
     .select(['link.linkId', 'link.originalUrl', 'user.userId', 'user.username', 'user.isAdmin'])
     .getMany();
@@ -63,7 +69,8 @@ async function getLinksByUserId(userId: string): Promise<Link[]> {
 async function getLinksByUserIdForOwnAccount(userId: string): Promise<Link[]> {
   const links = await linkRepository
     .createQueryBuilder('link')
-    .where('userId = :userId', { user: { userId } })
+    // .where('userId = :userId', { user: { userId } })
+    .where({ user: { userId } })
     .leftJoin('link.user', 'user')
     .select([
       'link.linkId',
@@ -84,6 +91,7 @@ async function deleteLinkByLinkId(linkId: string): Promise<void> {
   await linkRepository
     .createQueryBuilder('link')
     .delete()
+    .from(Link)
     .where('linkId = :linkId', { linkId })
     .execute();
 }
