@@ -7,11 +7,10 @@ import { registerUser, logIn } from './controllers/UserController';
 import { shortenUrl, deleteLink, getLinks, visitLink } from './controllers/LinkController';
 
 const app: Express = express();
-app.set('view engine', 'ejs');
+// app.set('view engine', 'ejs');
 const { PORT, COOKIE_SECRET } = process.env;
 const SQLiteStore = connectSqlite3(session);
 
-app.use(express.json());
 app.use(express.static('public', { extensions: ['html'] }));
 
 app.use(
@@ -26,6 +25,7 @@ app.use(
 );
 
 app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 
 app.post('/users', registerUser);
 app.post('/login', logIn);

@@ -43,7 +43,8 @@ async function shortenUrl(req: Request, res: Response): Promise<void> {
   try {
     const newLink = await createNewLink(originalUrl, linkId, user);
     newLink.user.passwordHash = undefined;
-    res.sendStatus(201).json(newLink);
+    res.redirect('/login');
+    // res.sendStatus(201).json(newLink);
   } catch (err) {
     console.error(err);
     const databaseErrorMessage = parseDatabaseError(err);
