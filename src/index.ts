@@ -7,7 +7,7 @@ import { registerUser, logIn } from './controllers/UserController';
 import { shortenUrl, deleteLink, getLinks, visitLink } from './controllers/LinkController';
 
 const app: Express = express();
-// app.set('view engine', 'ejs');
+app.set('view engine', 'ejs');
 const { PORT, COOKIE_SECRET } = process.env;
 const SQLiteStore = connectSqlite3(session);
 

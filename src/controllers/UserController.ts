@@ -13,9 +13,9 @@ async function registerUser(req: Request, res: Response): Promise<void> {
   const passwordHash = await argon2.hash(password);
 
   try {
-    const newUser = await addNewUser(username, passwordHash);
+    await addNewUser(username, passwordHash);
     res.redirect('/login');
-    res.sendStatus(201).json(newUser);
+    // res.sendStatus(201).json(newUser);
   } catch (err) {
     console.error(err);
     const databaseErrorMessage = parseDatabaseError(err);
